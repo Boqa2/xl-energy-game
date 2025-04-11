@@ -1,0 +1,457 @@
+@import url("https://fonts.googleapis.com/css2?family=Bangers&family=Bebas+Neue&family=Big+Shoulders:opsz,wght@10..72,100..900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inconsolata:wght@200..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Oswald:wght@200..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  height: 100vh;
+  background-color: #222;
+  user-select: none;
+}
+@font-face {
+  font-family: "MyFont";
+  src: url("fonts/Compctab.ttf") format("truetype");
+}
+@font-face {
+  font-family: "FontBold";
+  src: url("fonts/CompactaBoldBT.ttf") format("truetype");
+}
+@font-face {
+  font-family: "FontItalic";
+  src: url("fonts/Compctbi.ttf") format("truetype");
+}
+.phone {
+  border-radius: 50px;
+  border: 8px solid black;
+  background: white;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  position: fixed;
+  color: #fff;
+  width: 330px;
+  height: 667px;
+}
+.screen {
+  width: 100%;
+  height: 100%;
+  border-radius: 30px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 1s ease;
+}
+.notch {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  z-index: 1;
+  transform: translateX(-50%);
+  width: 135px;
+  height: 30px;
+  background: black;
+  border-radius: 15px;
+}
+.swipe {
+  width: 120px;
+  height: 6px;
+  background: #89898981;
+  position: absolute;
+  bottom: 7px;
+  border-radius: 5px;
+  right: 50%;
+  transform: translateX(50%);
+}
+.video {
+  background: black;
+  height: 100%;
+}
+.video > video {
+  width: 100%;
+  height: 100%;
+}
+.game-platform {
+  height: 100%;
+}
+.sky {
+  height: 40%;
+  background: rgb(163, 206, 209);
+  position: relative;
+}
+.earth {
+  height: 60%;
+  border-top: 10px solid rgb(94, 81, 76);
+  background: rgb(134, 103, 84);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.logo {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.logo > img {
+  width: 130px;
+  height: 30px;
+}
+.house {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 89.5px;
+}
+.house > img {
+  width: 100%;
+  height: 100%;
+}
+.place-drag {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+}
+.drops {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  background: linear-gradient(to right, rgb(170, 170, 170) 5%, white 50%);
+  border-radius: 5px;
+  position: relative;
+  padding: 2px;
+}
+.text-drop {
+  font-weight: 900;
+  font-size: 12px;
+  color: #e60012; /* красный */
+  -webkit-text-stroke: 0.7px white; /* белая обводка */
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.4); /* мягкая тень */
+  font-family: "MyFont", sans-serif;
+  position: absolute;
+  line-height: 0.8;
+}
+.top {
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.bottom {
+  bottom: -7px;
+  left: 50%;
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+.borders-drop {
+  border: 1px solid red;
+  width: 97%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3px;
+  height: 97%;
+  color: black;
+  font-family: "Poppins", sans-serif;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.drops:nth-child(1) {
+  top: 110px;
+  left: 140px;
+}
+.drops:nth-child(2) {
+  left: 200px;
+}
+.drops:nth-child(3) {
+  top: -50px;
+  left: 30px;
+}
+.drops:nth-child(4) {
+  top: 70px;
+  left: 100px;
+}
+.drops:nth-child(5) {
+  top: -56px;
+  left: 260px;
+}
+.drops:nth-child(6) {
+  left: 230px;
+  top: -20px;
+}
+.s {
+  bottom: -15px;
+}
+
+.cards {
+  width: 100%;
+  height: 310px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  gap: 15px;
+}
+.items-card {
+  width: 75%;
+  display: grid;
+  justify-content: center;
+  margin-right: 10px;
+  grid-template-columns: repeat(3, 50px);
+  grid-template-rows: repeat(2, 50px);
+  gap: 20px;
+  column-gap: 30px;
+}
+.submit {
+  width: 67%;
+  height: 44px;
+  text-transform: uppercase;
+  font-size: 20px;
+  border: none;
+  background: black;
+  color: #fff;
+  padding: 0;
+}
+.submit:active {
+  transform: translateY(1px);
+}
+.time-score {
+  padding-top: 20px;
+  text-transform: uppercase;
+  font-size: 17px;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+.card {
+  width: 100%;
+  height: 100%;
+  border: 2px solid #fff;
+  padding: 2px;
+  border-radius: 10px;
+}
+.item {
+  background: #fff;
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  cursor: grab;
+  font-weight: 700;
+  font-family: "Poppins", serif;
+  color: rgb(57, 67, 68);
+  font-size: 15px;
+  display: flex;
+  touch-action: manipulation; /* важно для touch */
+  user-select: none;
+  justify-content: center;
+  align-items: center;
+}
+.starts {
+  position: absolute;
+  top: 265px;
+  left: 0;
+  width: 100%;
+  height: 315px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background: rgba(0, 0, 0, 0.847);
+}
+#text {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 200;
+  color: #d2d2d2;
+  font-family: "Poppins", sans-serif;
+  margin-top: 5px;
+}
+.for-text {
+  line-height: 1;
+  text-align: center;
+  padding: 0 30px;
+  padding-top: 44px;
+  display: grid;
+  gap: 10px;
+}
+
+.texts {
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+}
+.texts:nth-child(1) {
+  color: #e60012;
+  font-size: 23px;
+  font-weight: 900;
+}
+.texts:nth-child(2) {
+  font-size: 21px;
+  font-weight: 700;
+}
+.texts:nth-child(3) {
+  font-size: 15px;
+  padding: 0 20px;
+}
+.for-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.for-button > button {
+  border: 0;
+  background: #e60012;
+  padding: 10px 40px;
+  font-weight: 800;
+  font-size: 20px;
+  cursor: pointer;
+  color: #fff;
+}
+.for-button > button:active {
+  transform: translateY(1px);
+}
+
+.check {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  position: absolute;
+  top: -10px;
+  left: -15px;
+}
+.check > img {
+  width: 100%;
+  height: 100%;
+}
+
+.end-container {
+  width: 100%;
+  height: 100%;
+  background: rgb(0, 0, 0);
+  display: flex;
+  justify-content: end;
+  align-items: end;
+  flex-direction: column;
+}
+.endcard {
+  width: 100%;
+  height: 70%;
+  background: url("../assets/Generative\ Fill\ 539.png") center/cover no-repeat;
+}
+.black-gradient {
+  width: 310px;
+  height: 50%;
+  background: linear-gradient(
+    to top,
+    rgba(255, 252, 252, 0) 0%,
+    rgb(0, 0, 0) 30%
+  );
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 10px;
+  padding-top: 50px;
+  overflow: hidden;
+}
+.logos {
+  width: 160px;
+  height: 30px;
+  position: relative;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.inner-ends {
+  width: 100%;
+  height: 100%;
+}
+.scores {
+  font-family: "Poppins", sans-serif;
+  text-transform: uppercase;
+  color: rgb(218, 16, 32);
+  font-weight: 600;
+  text-align: center;
+  font-size: 18px;
+  position: relative;
+  top: 10px;
+}
+
+.texts-end {
+  font-family: "Poppins", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-top: 20px;
+  text-align: center;
+  padding: 0 30px;
+}
+.texts-end > a {
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 400;
+  color: #fff;
+  cursor: pointer;
+}
+.btns {
+  display: grid;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+.btns > button,
+.btns > a {
+  text-decoration: none;
+  padding: 8px 20px;
+  border: none;
+  user-select: none;
+  font-weight: 700;
+  font-size: 20px;
+  font-family: "Poppins", sans-serif;
+}
+.btn {
+  color: red;
+  background: #fff;
+}
+
+.link {
+  color: #fff;
+  font-size: 18px;
+  background-color: #e60012;
+}
+.btns > button:active,
+.btns > a:active {
+  transform: translateY(1px);
+}
+
+.hidden {
+  display: none;
+}
+
+.hold {
+  cursor: -moz-grabbing;
+  filter: opacity(0.4);
+  border: 2px solid white;
+  box-shadow: 0px 0px 5px #222;
+}
+
+.hovered {
+  opacity: 0;
+}
+
+.for-small {
+  background: transparent;
+  font-size: 12px;
+  color: black;
+}
+
+.green-text {
+  color: rgb(48, 98, 7);
+}
+.red-text {
+  color: red;
+}
+.green {
+  background: rgb(48, 98, 7);
+}
+.red {
+  background: red;
+}

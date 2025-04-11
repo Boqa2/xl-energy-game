@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/index.js" defer></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+  </head>
+  <body>
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="screen">
+        <div class="video hidden">
+          <video id="video" preload="metadata" muted autoplay>
+            <source src="assets/XL-energy.mp4" />
+          </video>
+        </div>
+        <div  id="game" class="game-platform ">
+          <div class="sky">
+            <a href="https://my.xcelenergy.com/s/" target="_blank" class="logo">
+              <img src="assets/XL_logo_Hz_3C.png" alt="" />
+            </a>
+            <div class="house">
+              <img id="beforStart" src="assets/Image.png" alt="" />
+              <div class="place-drag">
+                <div id="drops" class="drops">
+                  <span class="text-drop top">%</span>
+                  <div id="drop" class="borders-drop"></div>
+                  <span class="text-drop bottom">Refrigerator</span>
+                </div>
+                <div id="drops" class="drops">
+                  <span class="text-drop top">%</span>
+                  <div id="drop" class="borders-drop"></div>
+                  <span class="text-drop bottom">Lighting</span>
+                </div>
+                <div id="drops" class="drops">
+                  <span class="text-drop top">%</span>
+                  <div id="drop" class="borders-drop"></div>
+                  <span class="text-drop bottom s">Space Heater</span>
+                </div>
+                <div id="drops" class="drops">
+                  <span class="text-drop top">%</span>
+                  <div id="drop" class="borders-drop"></div>
+                  <span class="text-drop bottom s">Water Heating</span>
+                </div>
+                <div id="drops" class="drops">
+                  <span class="text-drop top">%</span>
+                  <div id="drop" class="borders-drop"></div>
+                  <span class="text-drop bottom">Cooling</span>
+                </div>
+                <div id="drops" class="drops">
+                  <span class="text-drop top">%</span>
+                  <div id="drop" class="borders-drop"></div>
+                  <span class="text-drop bottom s">Clothes Dryer</span>
+                </div>
+              </div>
+              <div class="cards">
+                <div class="time-score">
+                  <span>Time : <span id="timer">20</span></span> |
+                  <span>score:<span id="score" class="score">5</span></span>
+                </div>
+                <div class="items-card">
+                  <div class="card">
+                    <div id="drag" class="item" draggable="true"></div>
+                  </div>
+                  <div class="card">
+                    <div id="drag" class="item" draggable="true"></div>
+                  </div>
+                  <div class="card">
+                    <div id="drag" class="item" draggable="true"></div>
+                  </div>
+                  <div class="card">
+                    <div id="drag" class="item" draggable="true"></div>
+                  </div>
+                  <div class="card">
+                    <div id="drag" class="item" draggable="true"></div>
+                  </div>
+                  <div class="card">
+                    <div id="drag" class="item" draggable="true"></div>
+                  </div>
+                </div>
+                <p class="" id="text">Well Done</p>
+                <button id="submit" class="submit">Submit</button>
+              </div>
+              <div id="startGame" class="starts">
+                <div class="for-text">
+                  <p class="texts">What uses the most energy in your house?</p>
+                  <p class="texts">The answer may surprise you.</p>
+                  <p class="texts">
+                    Drag and drop your guess for each appliance and hit 'Submit'
+                    to see your results.
+                  </p>
+                </div>
+                <div class="for-button">
+                  <button id="playNow">Play Now</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="earth"></div>
+        </div>
+        <div id="endCard" class="end-container hidden ">
+          <div class="black-gradient">
+            <div class="inner-ends">
+              <img class="logos" src="assets/XL_logo_Hz_W_wRed.png" alt="" />
+              <div class="scores">Score : <span id="score">0</span></div>
+              <div class="texts-end">
+                Saving energy is also surprisingly easy. Visit
+                <a href="">xcelenergy.com/Tips</a> for more.
+              </div>
+              <div class="btns">
+                <button  class="btn"  id="playAgain">Play Again</button>
+                <a class="link" href="#" target="_blank">Learn How to Save</a>
+              </div>
+            </div>
+          </div>
+          <div class="endcard"></div>
+        </div>
+      </div>
+      <div class="swipe"></div>
+    </div>
+  </body>
+</html>
