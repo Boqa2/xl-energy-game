@@ -12,11 +12,13 @@ const submit = document.querySelector("#submit");
 const startGame = document.querySelector("#startGame");
 const playNow = document.querySelector("#playNow");
 const endCard = document.querySelector("#endCard");
+const playAgain = document.querySelector("#playAgain");
 
 let time = 20;
 drops.forEach((el) => {
   el.classList.add("hidden");
 });
+
 video.addEventListener("canplaythrough", () => {
   video.play();
 });
@@ -47,7 +49,11 @@ function StartGame() {
       timers--;
       timer.textContent = timers;
     } else {
-      clearInterval(gameInterval);
+      setTimeout(() => {
+        clearInterval(gameInterval);
+        endCard.classList.remove("hidden");
+        game.classList.add("hidden");
+      }, 3000);
     }
   }, 1000);
 }
@@ -136,19 +142,15 @@ drop.forEach((drp) => {
     }
   });
 });
-let scores = 0;
-score.forEach((els) => {
-  els.textContent = scores;
-  
-});
+
+function name(params) {}
 submit.addEventListener("click", () => {
   let allCorrect = true;
+  let scores = 0;
 
   drop.forEach((dropzone) => {
     const expectedValue = dropzone.getAttribute("data-drop");
     const droppedItem = dropzone.querySelector("[data-drag]");
-
-    console.log(droppedItem);
 
     dropzone.classList.remove("correct", "wrong");
 
@@ -161,18 +163,18 @@ submit.addEventListener("click", () => {
     const actualValue = droppedItem.getAttribute("data-drag");
 
     if (expectedValue === actualValue) {
-      dropzone.classList.add("correct");
       droppedItem.classList.add("green-text");
       dropzone.innerHTML += `<span class="check"><img src="assets/T.png" alt="correct" /></span>`;
       scores++;
+      score.forEach((el) => {
+        el.textContent = scores;
+      });
     } else {
-      dropzone.classList.add("wrong");
       droppedItem.classList.add("red-text");
       dropzone.innerHTML += `<span class="check"><img src="assets/X.png" alt="wrong" /></span>`;
       allCorrect = false;
     }
   });
-
   if (allCorrect) {
     text.textContent = "WELL DONE!";
     submit.classList.add("green");
@@ -181,3 +183,10 @@ submit.addEventListener("click", () => {
     submit.classList.add("red");
   }
 });
+
+function PlayAgain() {
+  StartGame();
+  game.classList.remove("hidden");
+  endCard.classList.add("hidden");
+}
+playAgain.addEventListener('click', PlayAgain )

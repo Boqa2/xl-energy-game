@@ -10,17 +10,18 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
     />
+    <link rel="stylesheet" href="css/responsive.css" />
   </head>
   <body>
     <div class="phone">
       <div class="notch"></div>
       <div class="screen">
-        <div class="video hidden">
+        <div class="video">
           <video id="video" preload="metadata" muted autoplay>
             <source src="assets/XL-energy.mp4" />
           </video>
         </div>
-        <div  id="game" class="game-platform ">
+        <div id="game" class="game-platform">
           <div class="sky">
             <a href="https://my.xcelenergy.com/s/" target="_blank" class="logo">
               <img src="assets/XL_logo_Hz_3C.png" alt="" />
@@ -62,7 +63,7 @@
               <div class="cards">
                 <div class="time-score">
                   <span>Time : <span id="timer">20</span></span> |
-                  <span>score:<span id="score" class="score">5</span></span>
+                  <span>score:<span id="score" class="score">0</span></span>
                 </div>
                 <div class="items-card">
                   <div class="card">
@@ -104,7 +105,7 @@
           </div>
           <div class="earth"></div>
         </div>
-        <div id="endCard" class="end-container hidden ">
+        <div id="endCard" class="end-container hidden">
           <div class="black-gradient">
             <div class="inner-ends">
               <img class="logos" src="assets/XL_logo_Hz_W_wRed.png" alt="" />
@@ -114,7 +115,7 @@
                 <a href="">xcelenergy.com/Tips</a> for more.
               </div>
               <div class="btns">
-                <button  class="btn"  id="playAgain">Play Again</button>
+                <button class="btn" id="playAgain">Play Again</button>
                 <a class="link" href="#" target="_blank">Learn How to Save</a>
               </div>
             </div>
