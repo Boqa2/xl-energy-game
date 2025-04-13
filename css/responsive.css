@@ -2,6 +2,7 @@
   .phone {
     width: 800px;
     position: relative;
+    height: 100%;
   }
   .house {
     display: flex;
@@ -11,14 +12,21 @@
   }
   .house > img {
     width: 55%;
-    top: 54px;
+    height: 110%;
+    top: -19px;
     position: absolute;
   }
   .sky {
     height: 66%;
   }
   .starts {
-    height: 100%;
+    width: 43%;
+    height: 156%;
+    top: -90px;
+    left: 457px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .logo {
     display: none;
@@ -26,12 +34,66 @@
   .cards {
     width: 42%;
     position: absolute;
-    top: 0;
+    top: -28px;
     right: 20px;
-
   }
-  .logos{
-    display: block;
+  .logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateX(0);
+    left: 0;
+    margin-top: 20px;
+  }
+  .for-text {
+    padding-top: 20px;
+  }
+  .black-gradient {
+    width: 45%;
+    left: 430px;
+    background: linear-gradient(
+      to right,
+      rgba(255, 252, 252, 0) 10%,
+      rgb(0, 0, 0) 50%
+    );
+    height: 100%;
+  }
+  .endcard {
+    height: 100%;
+  }
+  .endcard > img {
+    width: 100%;
+    height: 100%;
+  }
+  .end-container {
+    flex-direction: row;
+  }
+
+  .drops:nth-child(1) {
+    top: 110px;
+    left: 170px;
+  }
+  .drops:nth-child(2) {
+    left: 270px;
+  }
+  .drops:nth-child(3) {
+    top: -50px;
+    left: 70px;
+  }
+  .drops:nth-child(4) {
+    top: 70px;
+    left: 170px;
+  }
+  .drops:nth-child(5) {
+    top: -56px;
+    left: 360px;
+  }
+  .drops:nth-child(6) {
+    left: 340px;
+    top: -20px;
+  }
+  .notch{
+    display: none;
   }
 }
 @media (max-width: 400px) {

@@ -44,7 +44,12 @@ let timers = time;
 function StartGame() {
   startGame.classList.add("hidden");
   beforStartImage.src = "assets/Image (1).png";
-  beforStartImage.style.height = "102.5%";
+  if(window.innerHeight <= 400){
+    beforStartImage.style.height = "113%";
+  }else{
+    beforStartImage.style.height = "102.5%";
+
+  }
   drops.forEach((el) => {
     el.classList.remove("hidden");
   });
