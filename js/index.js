@@ -31,40 +31,46 @@ video.addEventListener("ended", () => {
   }, 1000);
 });
 
+const array = ["16.3%", "7%", "10.3%", "13.5%", "4.5%", "14.5%"];
+function shuffleArray(arr) {
+  return arr
+    .map((value) => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value);
+}
+const shuffledArray = shuffleArray(array);
 text.textContent = "";
+let timers = time;
 function StartGame() {
   startGame.classList.add("hidden");
   beforStartImage.src = "assets/Image (1).png";
   beforStartImage.style.height = "102.5%";
-
   drops.forEach((el) => {
     el.classList.remove("hidden");
   });
   text.textContent = "";
   let gameInterval;
-  let timers = time;
   timer.textContent = timers;
   gameInterval = setInterval(() => {
     if (timers > 0) {
       timers--;
       timer.textContent = timers;
-    } else {
-      setTimeout(() => {
-        clearInterval(gameInterval);
-        endCard.classList.remove("hidden");
-        game.classList.add("hidden");
-      }, 3000);
+      if (timers === 0) {
+        setTimeout(() => {
+          clearInterval(gameInterval);
+          endCard.classList.remove("hidden");
+          game.classList.add("hidden");
+        }, 3000);
+      }
     }
   }, 1000);
 }
 playNow.addEventListener("click", StartGame);
 
-const array = ["16.3%", "7%", "10.3%", "13.5%", "4.5%", "14.5%"];
-
 drag.forEach((el, index) => {
-  for (let i = 0; i < array.length; i++) {
-    el.textContent = array[index];
-    el.setAttribute("data-drag", array[index]);
+  for (let i = 0; i < shuffledArray.length; i++) {
+    el.textContent = shuffledArray[index];
+    el.setAttribute("data-drag", shuffledArray[index]);
   }
 });
 
@@ -92,14 +98,16 @@ drag.forEach((elm) => {
     dragged = elm;
     currentTouch = e.touches[0];
     elm.style.position = "absolute";
-    elm.style.zIndex = "1000";
+    elm.style.zIndex = "10";
+    elm.style.width = "49px";
+    elm.style.height = "49px";
   });
 
   elm.addEventListener("touchmove", (e) => {
     e.preventDefault();
     currentTouch = e.touches[0];
-    dragged.style.left = currentTouch.clientX - dragged.offsetWidth / 2 + "px";
-    dragged.style.top = currentTouch.clientY - dragged.offsetHeight / 2 + "px";
+    dragged.style.left = currentTouch.clientX - dragged.offsetWidth + "px";
+    dragged.style.top = currentTouch.clientY - dragged.offsetHeight + "px";
   });
 
   elm.addEventListener("touchend", (e) => {
@@ -143,7 +151,6 @@ drop.forEach((drp) => {
   });
 });
 
-function name(params) {}
 submit.addEventListener("click", () => {
   let allCorrect = true;
   let scores = 0;
@@ -188,5 +195,32 @@ function PlayAgain() {
   StartGame();
   game.classList.remove("hidden");
   endCard.classList.add("hidden");
+
+  text.textContent = "";
+  submit.classList.remove("green", "red");
+  score.forEach((el) => (el.textContent = 0));
+
+  timers = time;
+  timer.textContent = timers;
+
+  const dragCont = document.querySelectorAll(".card");
+  drag.forEach((el, index) => {
+    el.innerHTML = "";
+    el.setAttribute("data-drag", shuffledArray[index]);
+    el.classList.remove(
+      "green-text",
+      "red-text",
+      "hold",
+      "invisible",
+      "for-small"
+    );
+    dragCont[index].appendChild(el)
+    el.textContent = shuffledArray[index]
+  });
+
+  drop.forEach((el, i) => {
+    el.innerHTML = "";
+    el.setAttribute("data-drop", shuffledArray[i]);
+  });
 }
-playAgain.addEventListener('click', PlayAgain )
+playAgain.addEventListener("click", PlayAgain);
