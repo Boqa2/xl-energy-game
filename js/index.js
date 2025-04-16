@@ -13,13 +13,18 @@ const startGame = document.querySelector("#startGame");
 const playNow = document.querySelector("#playNow");
 const endCard = document.querySelector("#endCard");
 const playAgain = document.querySelector("#playAgain");
+const volume = document.querySelector(".volume");
+const hits = document.querySelector(".hints");
+const hit_cols = document.querySelector("#hit");
+const correct = document.querySelectorAll("[correct]");
 
-let time = 20;
+let time = 20000;
 drops.forEach((el) => {
-  el.classList.add("hidden");
+  el.classList.add("opacite-0");
+  hits.classList.add("opacite-0");
 });
-
 video.addEventListener("canplaythrough", () => {
+  video.muted = true;
   video.play();
 });
 video.addEventListener("ended", () => {
@@ -31,6 +36,17 @@ video.addEventListener("ended", () => {
   }, 1000);
 });
 
+function volumeUp() {
+  let mute = video.muted;
+  if (mute !== false) {
+    volume.innerHTML = `<i class="bi bi-volume-up-fill"></i>`;
+    video.muted = false;
+  } else {
+    volume.innerHTML = `<i class="bi bi-volume-mute-fill"></i>`;
+    video.muted = true;
+  }
+}
+
 const array = ["16.3%", "7%", "10.3%", "13.5%", "4.5%", "14.5%"];
 function shuffleArray(arr) {
   return arr
@@ -38,20 +54,23 @@ function shuffleArray(arr) {
     .sort((a, b) => a.sort - b.sort)
     .map(({ value }) => value);
 }
+
 const shuffledArray = shuffleArray(array);
 text.textContent = "";
 let timers = time;
+
 function StartGame() {
   startGame.classList.add("hidden");
   beforStartImage.src = "assets/Image (1).png";
-  if(window.innerHeight <= 400){
+  hits.classList.remove("opacite-0");
+  if (window.innerHeight <= 400) {
     beforStartImage.style.height = "113%";
-  }else{
+  } else {
     beforStartImage.style.height = "102.5%";
-
   }
   drops.forEach((el) => {
-    el.classList.remove("hidden");
+    el.classList.remove("opacite-0");
+    el.classList.add("opacite-1");
   });
   text.textContent = "";
   let gameInterval;
@@ -70,28 +89,67 @@ function StartGame() {
     }
   }, 1000);
 }
-playNow.addEventListener("click", StartGame);
+let hits_length = 5;
+hit_cols.textContent = hits_length;
+let correctS = null;
+function TextHide() {
+  if (hits_length <= 0) return;
+
+  drop.forEach((el, i) => {
+    const correctAttr = el.getAttribute("correct");
+    if (correctAttr === "false") {
+      // показываем подсказку
+      el.textContent = shuffledArray[i];
+      el.classList.add("text-opacity");
+      el.style.color = "rgba(0, 0, 0, 0.41)";
+
+      setTimeout(() => {
+        el.classList.add("text-opacity");
+        el.style.color = "black";
+        el.textContent = "";
+
+        // возвращаем элемент назад в .card с тем же индексом
+        const droppedItem = el.querySelector("[data-drag]");
+        if (droppedItem) {
+          const cardContainers = document.querySelectorAll(".card");
+          cardContainers[i].appendChild(droppedItem);
+          // сбросим возможные стили перетаскивания
+          Object.assign(droppedItem.style, {
+            position: "",
+            left: "",
+            top: "",
+            zIndex: "",
+            pointerEvents: "",
+          });
+          droppedItem.removeAttribute("dragged");
+        }
+      }, 2000);
+    }
+  });
+
+  hits_length--;
+  hit_cols.textContent = hits_length;
+}
 
 drag.forEach((el, index) => {
-  for (let i = 0; i < shuffledArray.length; i++) {
-    el.textContent = shuffledArray[index];
-    el.setAttribute("data-drag", shuffledArray[index]);
-  }
+  el.textContent = shuffledArray[index];
+  el.setAttribute("data-drag", shuffledArray[index]);
 });
 
 drop.forEach((el, i) => {
-  for (let ind = 0; ind < array.length; ind++) {
-    el.setAttribute("data-drop", array[i]);
-  }
+  el.setAttribute("data-drop", shuffledArray[i]);
 });
+
 let dragged = null;
 let currentTouch = null;
+let mas_draged = [];
 
 drag.forEach((elm) => {
   elm.addEventListener("dragstart", () => {
     dragged = elm;
     elm.classList.add("hold");
     setTimeout(() => elm.classList.add("invisible"), 0);
+    elm.setAttribute("dragged", "drag");
   });
 
   elm.addEventListener("dragend", () => {
@@ -102,31 +160,33 @@ drag.forEach((elm) => {
   elm.addEventListener("touchstart", (e) => {
     dragged = elm;
     currentTouch = e.touches[0];
-    elm.style.position = "absolute";
-    elm.style.zIndex = "10";
-    elm.style.width = "49px";
-    elm.style.height = "49px";
+    elm.classList.add("for-touch");
+    document.body.appendChild(elm);
   });
 
   elm.addEventListener("touchmove", (e) => {
     e.preventDefault();
     currentTouch = e.touches[0];
-    dragged.style.left = currentTouch.clientX - dragged.offsetWidth + "px";
-    dragged.style.top = currentTouch.clientY - dragged.offsetHeight + "px";
+    dragged.style.left = currentTouch.clientX - dragged.offsetWidth / 2 + "px";
+    dragged.style.top = currentTouch.clientY - dragged.offsetHeight / 2 + "px";
   });
 
   elm.addEventListener("touchend", (e) => {
     const x = currentTouch.clientX;
     const y = currentTouch.clientY;
-
     const dropTarget = document.elementFromPoint(x, y);
 
-    if (dropTarget && dropTarget.classList.contains("drop")) {
+    if (dropTarget && dropTarget.getAttribute("id") === "drop") {
       dropTarget.appendChild(dragged);
+      dragged.classList.add("for-notTouch");
+      elm.classList.add("for-elm");
+    } else {
+      // вернуть обратно
       dragged.style.position = "";
       dragged.style.left = "";
       dragged.style.top = "";
       dragged.style.zIndex = "";
+      dragged.style.pointerEvents = "";
     }
 
     dragged = null;
@@ -134,7 +194,7 @@ drag.forEach((elm) => {
   });
 });
 
-drop.forEach((drp) => {
+drop.forEach((drp, i) => {
   drp.addEventListener("dragenter", (e) => {
     e.preventDefault();
     drp.classList.add("hovered");
@@ -161,6 +221,13 @@ submit.addEventListener("click", () => {
   let scores = 0;
 
   drop.forEach((dropzone) => {
+    const unusedDrags = document.querySelectorAll("#drag:not([dragged])");
+    if (unusedDrags.length > 0) {
+      // Есть ещё неиспользованные элементы — выходим
+      console.log("Не все элементы размещены!");
+      return;
+    }
+
     const expectedValue = dropzone.getAttribute("data-drop");
     const droppedItem = dropzone.querySelector("[data-drag]");
 
@@ -181,19 +248,22 @@ submit.addEventListener("click", () => {
       score.forEach((el) => {
         el.textContent = scores;
       });
+      dropzone.setAttribute("correct", true);
     } else {
       droppedItem.classList.add("red-text");
       dropzone.innerHTML += `<span class="check"><img src="assets/X.png" alt="wrong" /></span>`;
       allCorrect = false;
+      dropzone.setAttribute("correct", false);
+    }
+
+    if (allCorrect) {
+      text.textContent = "WELL DONE!";
+      submit.classList.add("green");
+    } else {
+      text.textContent = "OOPS... TRY AGAIN!";
+      submit.classList.add("red");
     }
   });
-  if (allCorrect) {
-    text.textContent = "WELL DONE!";
-    submit.classList.add("green");
-  } else {
-    text.textContent = "OOPS... TRY AGAIN!";
-    submit.classList.add("red");
-  }
 });
 
 function PlayAgain() {
@@ -212,20 +282,19 @@ function PlayAgain() {
   drag.forEach((el, index) => {
     el.innerHTML = "";
     el.setAttribute("data-drag", shuffledArray[index]);
-    el.classList.remove(
-      "green-text",
-      "red-text",
-      "hold",
-      "invisible",
-      "for-small"
-    );
-    dragCont[index].appendChild(el)
-    el.textContent = shuffledArray[index]
+    el.classList.remove("green-text", "red-text", "invisible", "for-small");
+    dragCont[index].appendChild(el);
+    el.textContent = shuffledArray[index];
   });
 
   drop.forEach((el, i) => {
     el.innerHTML = "";
     el.setAttribute("data-drop", shuffledArray[i]);
+    el.classList.add("opacite-1");
   });
 }
+
+volume.addEventListener("click", volumeUp);
 playAgain.addEventListener("click", PlayAgain);
+hits.addEventListener("click", TextHide);
+playNow.addEventListener("click", StartGame);

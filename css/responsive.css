@@ -68,7 +68,6 @@
   .end-container {
     flex-direction: row;
   }
-
   .drops:nth-child(1) {
     top: 110px;
     left: 170px;

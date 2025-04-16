@@ -103,7 +103,8 @@ body {
 }
 .house > img {
   width: 100%;
-  height: 100%;
+
+  height: 102.5%;
 }
 .place-drag {
   width: 100%;
@@ -121,6 +122,7 @@ body {
   border-radius: 5px;
   position: relative;
   padding: 2px;
+  transition: all 0.1s ease-in;
 }
 .text-drop {
   font-weight: 900;
@@ -128,7 +130,7 @@ body {
   color: #e60012; /* красный */
   -webkit-text-stroke: 0.7px white; /* белая обводка */
   text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.4); /* мягкая тень */
-  font-family: "MyFont", sans-serif;
+  font-family: "Poppins", sans-serif;
   position: absolute;
   line-height: 0.8;
 }
@@ -153,10 +155,15 @@ body {
   align-items: center;
   border-radius: 3px;
   height: 97%;
-  color: black;
   font-family: "Poppins", sans-serif;
   font-size: 13px;
   font-weight: 900;
+  color: transparent;
+}
+
+.text-opacity {
+  transition: all 0.2s ease-in;
+  color: rgba(0, 0, 0, 0.41);
 }
 
 .drops:nth-child(1) {
@@ -242,7 +249,8 @@ body {
   color: rgb(57, 67, 68);
   font-size: 15px;
   display: flex;
-  touch-action: manipulation; /* важно для touch */
+  touch-action: manipulation;
+  transition: all 0.1s ease-in;
   user-select: none;
   justify-content: center;
   align-items: center;
@@ -431,7 +439,7 @@ body {
 }
 
 .hold {
-  cursor: -moz-grabbing;
+  cursor: grabbing;
   filter: opacity(0.4);
   border: 2px solid white;
   box-shadow: 0px 0px 5px #222;
@@ -459,15 +467,83 @@ body {
 .red {
   background: red;
 }
-.logos{
+.logos {
   display: none;
 }
-.logos > img{
-  width: 190px;  
+.logos > img {
+  width: 190px;
 }
-.logoss{
+.logoss {
   width: 150px;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.volume {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 30%;
+  transform: translateY(-30%);
+  z-index: 1;
+  left: 15px;
+  font-size: 40px;
+}
+
+.opacite-1 {
+  opacity: 1;
+  z-index: 1;
+  transform: scale(1);
+}
+.opacite-0 {
+  opacity: 0;
+  z-index: 0;
+  transform: scale(0);
+}
+.hints {
+  position: absolute;
+  bottom: -20px;
+  left: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-family: "Poppins", sans-serif;
+}
+.hints > img {
+  width: 60px;
+  fill: #222;
+}
+.hints > p {
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  font-size: 20px;
+  margin: 0;
+}
+.numb-hint {
+  position: absolute;
+  top: 25%;
+  transform: translateY(-25%);
+  font-family: 700;
+}
+
+.for-touch {
+  position: absolute;
+  z-index: 10;
+  width: 50px;
+  height: 50px;
+  pointer-events: none;
+}
+.for-notTouch {
+  position: inherit;
+  z-index: 0;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+}
+.for-elm {
+  background: transparent;
+  font-size: 12px;
+  color: black;
 }
