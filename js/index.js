@@ -19,6 +19,10 @@ const hit_cols = document.querySelector("#hit");
 const correct = document.querySelectorAll("[correct]");
 
 let time = 20000;
+
+let dragged = null;
+let currentTouch = null;
+let originalParent = null;
 drops.forEach((el) => {
   el.classList.add("opacite-0");
   hits.classList.add("opacite-0");
@@ -94,26 +98,25 @@ hit_cols.textContent = hits_length;
 let correctS = null;
 function TextHide() {
   if (hits_length <= 0) return;
-
   drop.forEach((el, i) => {
     const correctAttr = el.getAttribute("correct");
-    if (correctAttr === "false") {
-      // показываем подсказку
+
+    if (correctAttr === "false" || !correctAttr) {
       el.textContent = shuffledArray[i];
       el.classList.add("text-opacity");
       el.style.color = "rgba(0, 0, 0, 0.41)";
-
       setTimeout(() => {
-        el.classList.add("text-opacity");
+        el.classList.remove("text-opacity");
         el.style.color = "black";
         el.textContent = "";
+        console.log("Timout");
 
-        // возвращаем элемент назад в .card с тем же индексом
         const droppedItem = el.querySelector("[data-drag]");
         if (droppedItem) {
           const cardContainers = document.querySelectorAll(".card");
+          console.log("droppedItem");
+
           cardContainers[i].appendChild(droppedItem);
-          // сбросим возможные стили перетаскивания
           Object.assign(droppedItem.style, {
             position: "",
             left: "",
@@ -121,6 +124,11 @@ function TextHide() {
             zIndex: "",
             pointerEvents: "",
           });
+          dragged.style.position = "";
+          dragged.style.left = "";
+          dragged.style.top = "";
+          dragged.style.zIndex = "";
+          dragged.style.pointerEvents = "";
           droppedItem.removeAttribute("dragged");
         }
       }, 2000);
@@ -140,10 +148,6 @@ drop.forEach((el, i) => {
   el.setAttribute("data-drop", shuffledArray[i]);
 });
 
-let dragged = null;
-let currentTouch = null;
-let mas_draged = [];
-
 drag.forEach((elm) => {
   elm.addEventListener("dragstart", () => {
     dragged = elm;
@@ -160,8 +164,14 @@ drag.forEach((elm) => {
   elm.addEventListener("touchstart", (e) => {
     dragged = elm;
     currentTouch = e.touches[0];
-    elm.classList.add("for-touch");
+
+    originalParent = elm.parentElement;
     document.body.appendChild(elm);
+
+    elm.classList.add("for-touch");
+
+    dragged.style.position = "absolute";
+    dragged.style.zIndex = "1000";
   });
 
   elm.addEventListener("touchmove", (e) => {
@@ -175,26 +185,42 @@ drag.forEach((elm) => {
     const x = currentTouch.clientX;
     const y = currentTouch.clientY;
     const dropTarget = document.elementFromPoint(x, y);
+    const expectedValue = dropTarget?.getAttribute("data-drop");
+    const actualValue = elm.getAttribute("data-drag");
 
     if (dropTarget && dropTarget.getAttribute("id") === "drop") {
       dropTarget.appendChild(dragged);
       dragged.classList.add("for-notTouch");
       elm.classList.add("for-elm");
+      elm.setAttribute("dragged", "drag");
     } else {
-      // вернуть обратно
-      dragged.style.position = "";
-      dragged.style.left = "";
-      dragged.style.top = "";
-      dragged.style.zIndex = "";
-      dragged.style.pointerEvents = "";
+      if (originalParent) {
+        originalParent.appendChild(dragged);
+      }
     }
 
+    // Сбросим стили
+    dragged.style.position = "";
+    dragged.style.left = "";
+    dragged.style.top = "";
+    dragged.style.zIndex = "";
+    dragged.classList.remove("for-touch");
+
+    console.log(expectedValue);
+    console.log(actualValue);
+
+    if (expectedValue === actualValue) {
+      dropTarget?.setAttribute("correct", true);
+    } else {
+      dropTarget?.setAttribute("correct", false);
+    }
     dragged = null;
     currentTouch = null;
+    originalParent = null;
   });
 });
 
-drop.forEach((drp, i) => {
+drop.forEach((drp) => {
   drp.addEventListener("dragenter", (e) => {
     e.preventDefault();
     drp.classList.add("hovered");
@@ -209,9 +235,16 @@ drop.forEach((drp, i) => {
   });
 
   drp.addEventListener("drop", () => {
+    const expectedValue = drp.getAttribute("data-drop");
+    const actualValue = dragged.getAttribute("data-drag");
     drp.classList.remove("hovered");
     if (dragged) {
       drp.appendChild(dragged);
+    }
+    if (expectedValue === actualValue) {
+      drp.setAttribute("correct", true);
+    } else {
+      drp.setAttribute("correct", false);
     }
   });
 });
@@ -223,7 +256,6 @@ submit.addEventListener("click", () => {
   drop.forEach((dropzone) => {
     const unusedDrags = document.querySelectorAll("#drag:not([dragged])");
     if (unusedDrags.length > 0) {
-      // Есть ещё неиспользованные элементы — выходим
       console.log("Не все элементы размещены!");
       return;
     }
