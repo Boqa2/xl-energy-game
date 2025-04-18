@@ -10,11 +10,21 @@
   .earth {
     height: 44%;
   }
-  .house > img {
+  .imgs {
     width: 55%;
     height: 110%;
-    top: -19px;
+    top: -4.6%;
     position: absolute;
+  }
+  .car{
+    left: 35px;
+    width: 59px;
+    height: 35px;
+  }
+  .heater{
+    width: 21px;
+    top: 27%;
+    left: 124.44px;
   }
   .sky {
     height: 66%;
@@ -24,7 +34,6 @@
     height: 156%;
     top: -90px;
     left: 457px;
-    display: flex;
     justify-content: center;
     align-items: center;
   }
@@ -91,9 +100,6 @@
     left: 340px;
     top: -20px;
   }
-  .notch{
-    display: none;
-  }
 }
 @media (max-width: 400px) {
   * {
@@ -103,6 +109,7 @@
     width: 100%;
     border: 0;
     border-radius: 0;
+    max-height: 800px;
     height: 100%;
   }
   .screen {
@@ -118,5 +125,8 @@
   }
   .black-gradient {
     width: 100%;
+  }
+  .starts {
+    height: 47%;
   }
 }

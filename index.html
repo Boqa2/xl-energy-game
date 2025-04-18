@@ -6,31 +6,40 @@
     <title>XL-Energy</title>
     <link rel="stylesheet" href="css/style.css" />
     <script src="js/index.js" defer></script>
-    <link rel="shortcut icon" href="assets/images-removebg-preview.png" type="icons">
+    <link
+      rel="shortcut icon"
+      href="assets/images-removebg-preview.png"
+      type="icons"
+    />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
     />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
     <link rel="stylesheet" href="css/responsive.css" />
   </head>
   <body>
     <div class="phone">
       <div class="notch"></div>
       <div class="screen">
-        <div class="video hidden">
+        <div class="video">
           <span class="volume"><i class="bi bi-volume-mute-fill"></i></span>
           <video id="video" preload="metadata" muted autoplay>
             <source src="assets/XL-energy.mp4" />
           </video>
         </div>
-        <div id="game" class="game-platform">
+        <div id="game" class="game-platform hidden">
           <div class="sky">
             <a href="https://my.xcelenergy.com/s/" target="_blank" class="logo">
               <img src="assets/XL_logo_Hz_3C.png" alt="" />
             </a>
             <div class="house">
-              <img id="beforStart" src="assets/Image (1).png" alt="" />
+              <img class="imgs" id="beforStart" src="assets/Image (1).png" alt="" />
+              <img class="heater" src="assets/Heater.png" alt="">
+              <img class="car" src="assets/Layer 13.png" alt="">
               <div class="place-drag">
                 <div id="drops" class="drops">
                   <span class="text-drop top">%</span>
@@ -64,7 +73,7 @@
                 </div>
               </div>
               <div class="hints">
-                <img src="assets/hint2x.png" alt="">
+                <img src="assets/hint2x.png" alt="" />
                 <span id="hit" class="numb-hint"></span>
                 <p>HINT</p>
               </div>
@@ -96,26 +105,26 @@
                 <p class="" id="text">Well Done</p>
                 <button id="submit" class="submit">Submit</button>
               </div>
-              <div id="startGame" class="starts">
-                <a
-                  href="https://my.xcelenergy.com/s/"
-                  target="_blank"
-                  class="logos"
-                >
-                  <img src="assets/XL_logo_Hz_W_wRed.png" alt="" />
-                </a>
-                <div class="for-text">
-                  <p class="texts">What uses the most energy in your house?</p>
-                  <p class="texts">The answer may surprise you.</p>
-                  <p class="texts">
-                    Drag and drop your guess for each appliance and hit 'Submit'
-                    to see your results.
-                  </p>
-                </div>
-                <div class="for-button">
-                  <button id="playNow">Play Now</button>
-                </div>
-              </div>
+            </div>
+          </div>
+          <div id="startGame" class="starts">
+            <a
+              href="https://my.xcelenergy.com/s/"
+              target="_blank"
+              class="logos"
+            >
+              <img src="assets/XL_logo_Hz_W_wRed.png" alt="" />
+            </a>
+            <div class="for-text">
+              <p class="texts">What uses the most energy in your house?</p>
+              <p class="texts">The answer may surprise you.</p>
+              <p class="texts">
+                Drag and drop your guess for each appliance and hit 'Submit' to
+                see your results.
+              </p>
+            </div>
+            <div class="for-button">
+              <button id="playNow">Play Now</button>
             </div>
           </div>
           <div class="earth"></div>

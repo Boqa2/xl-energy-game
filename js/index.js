@@ -18,7 +18,7 @@ const hits = document.querySelector(".hints");
 const hit_cols = document.querySelector("#hit");
 const correct = document.querySelectorAll("[correct]");
 
-let time = 20000;
+let time = 20;
 
 let dragged = null;
 let currentTouch = null;
@@ -107,7 +107,7 @@ function TextHide() {
       el.style.color = "rgba(0, 0, 0, 0.41)";
       setTimeout(() => {
         el.classList.remove("text-opacity");
-        el.style.color = "black";
+
         el.textContent = "";
         console.log("Timout");
 
@@ -204,6 +204,7 @@ drag.forEach((elm) => {
     dragged.style.left = "";
     dragged.style.top = "";
     dragged.style.zIndex = "";
+    dragged.classList.remove('for-elm')
     dragged.classList.remove("for-touch");
 
     console.log(expectedValue);
@@ -260,6 +261,7 @@ submit.addEventListener("click", () => {
       return;
     }
 
+
     const expectedValue = dropzone.getAttribute("data-drop");
     const droppedItem = dropzone.querySelector("[data-drag]");
 
@@ -280,6 +282,7 @@ submit.addEventListener("click", () => {
       score.forEach((el) => {
         el.textContent = scores;
       });
+      console.log(dropzone);
       dropzone.setAttribute("correct", true);
     } else {
       droppedItem.classList.add("red-text");
@@ -309,7 +312,8 @@ function PlayAgain() {
 
   timers = time;
   timer.textContent = timers;
-
+  hits_length = 5
+  hit_cols.textContent = hits_length
   const dragCont = document.querySelectorAll(".card");
   drag.forEach((el, index) => {
     el.innerHTML = "";
@@ -322,7 +326,6 @@ function PlayAgain() {
   drop.forEach((el, i) => {
     el.innerHTML = "";
     el.setAttribute("data-drop", shuffledArray[i]);
-    el.classList.add("opacite-1");
   });
 }
 
