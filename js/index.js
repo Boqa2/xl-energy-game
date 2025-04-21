@@ -18,7 +18,7 @@ const hits = document.querySelector(".hints");
 const hit_cols = document.querySelector("#hit");
 const correct = document.querySelectorAll("[correct]");
 
-let time = 31;
+let time = 30;
 
 let dragged = null;
 let currentTouch = null;
@@ -164,8 +164,10 @@ function attachTouchEvents(elm) {
     offsetX = currentTouch.clientX - rect.left;
     offsetY = currentTouch.clientY - rect.top;
 
-    originalParent = elm.parentElement;
-    document.body.appendChild(elm);
+    if (elm.parentElement !== document.body) {
+      originalParent = elm.parentElement;
+      document.body.appendChild(elm);
+    }
 
     elm.classList.add("for-touch");
 
@@ -184,6 +186,8 @@ function attachTouchEvents(elm) {
   });
 
   elm.addEventListener("touchend", (e) => {
+    if (!currentTouch || !dragged) return;
+
     const x = currentTouch.clientX;
     const y = currentTouch.clientY;
     const dropTarget = document.elementFromPoint(x, y);
@@ -291,7 +295,11 @@ drop.forEach((drp) => {
   attachMouseEventsDrop(drp);
 });
 
-submit.addEventListener("click", () => {
+let allCorrect = true;
+let scores = 0;
+
+function Submit() {
+  allCorrect = true; // сброс перед началом
   const unusedDrags = document.querySelectorAll("#drag:not([dragged])");
   if (unusedDrags.length > 0) {
     console.log("Не все элементы размещены!");
@@ -299,9 +307,6 @@ submit.addEventListener("click", () => {
     submit.classList.add("red");
     return;
   }
-
-  let allCorrect = true;
-  let scores = 0;
 
   drop.forEach((dropzone) => {
     const expectedValue = dropzone.getAttribute("data-drop");
@@ -339,10 +344,9 @@ submit.addEventListener("click", () => {
           droppedItem.style.background = "#fff";
           droppedItem.classList.remove("for-small", "red-text", "for-notTouch");
           droppedItem.classList.remove("red-text");
-
           droppedItem.removeAttribute("dragged");
         }
-      }, 3000);
+      }, 2000);
 
       Object.assign(droppedItem.style, {
         position: "",
@@ -357,6 +361,10 @@ submit.addEventListener("click", () => {
     drag.forEach((el) => {
       attachTouchEvents(el);
     });
+  });
+  document.querySelectorAll("#drag").forEach((el) => {
+    attachTouchEvents(el);
+    attachMouseEvents(el);
   });
 
   score.forEach((el) => {
@@ -376,7 +384,13 @@ submit.addEventListener("click", () => {
     submit.classList.remove("green");
     submit.classList.add("red");
   }
-});
+  dragged = null;
+  currentTouch = null;
+  originalParent = null;
+  allCorrect = true;
+  offsetX = 0;
+  offsetY = 0;
+}
 
 function PlayAgain() {
   StartGame();
@@ -420,12 +434,27 @@ function PlayAgain() {
     el.innerHTML = "";
     el.setAttribute("data-drop", newShuffled[i]);
     el.removeAttribute("correct");
+    el.classList.remove("correct", "wrong");
   });
   for (let i = 0; i < shuffledArray.length; i++) {
     shuffledArray[i] = newShuffled[i];
   }
+  dragged = null;
+  currentTouch = null;
+  originalParent = null;
+  allCorrect = true;
+  scores = 0;
+  score.forEach((el) => {
+    el.textContent = scores;
+  });
+  document.querySelectorAll("#drag").forEach((el) => {
+    attachTouchEvents(el);
+    attachMouseEvents(el);
+  });
+  offsetX = 0;
+  offsetY = 0;
 }
-
+submit.addEventListener("click", Submit);
 volume.addEventListener("click", volumeUp);
 playAgain.addEventListener("click", PlayAgain);
 hits.addEventListener("click", TextHide);
