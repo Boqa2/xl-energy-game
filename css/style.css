@@ -210,7 +210,7 @@ body {
   grid-template-rows: repeat(2, 50px);
   gap: 20px;
   column-gap: 30px;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.05s ease;
 }
 .submit {
   width: 67%;
@@ -250,7 +250,6 @@ body {
   font-size: 15px;
   display: flex;
   touch-action: manipulation;
-  transition: all 0.1s ease-in;
   user-select: none;
   justify-content: center;
   align-items: center;
@@ -541,6 +540,7 @@ body {
   left: 0;
   top: 0;
   pointer-events: none;
+  font-size: 12px;
 }
 .for-elm {
   background: transparent;
@@ -562,4 +562,8 @@ body {
   top: 61%;
   transform: translateY(-61%);
   left: 25px;
+}
+.for-retry{
+  background: #fff;
+  font-size: 15px;
 }
