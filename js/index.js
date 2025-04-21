@@ -27,18 +27,18 @@ drops.forEach((el) => {
   el.classList.add("opacite-0");
   hits.classList.add("opacite-0");
 });
-// video.addEventListener("canplaythrough", () => {
-//   video.muted = true;
-//   video.play();
-// });
-// video.addEventListener("ended", () => {
-//   video.pause();
+video.addEventListener("canplaythrough", () => {
+  video.muted = true;
+  video.play();
+});
+video.addEventListener("ended", () => {
+  video.pause();
 
-//   setTimeout(() => {
-//     videoContainer.classList.add("hidden");
-//     game.classList.remove("hidden");
-//   }, 1000);
-// });
+  setTimeout(() => {
+    videoContainer.classList.add("hidden");
+    game.classList.remove("hidden");
+  }, 1000);
+});
 
 function volumeUp() {
   let mute = video.muted;
@@ -330,7 +330,7 @@ function PlayAgain() {
     el.classList.remove("green-text", "red-text", "invisible", "for-small");
     dragCont[index].appendChild(el);
     el.textContent = shuffledArray[index];
-    el.style.background="#fff"
+    el.style.background = "#fff";
   });
 
   drop.forEach((el, i) => {

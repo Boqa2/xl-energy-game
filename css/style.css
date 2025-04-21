@@ -64,6 +64,7 @@ body {
 .video {
   background: black;
   height: 100%;
+  user-select: auto;
 }
 .video > video {
   width: 100%;
