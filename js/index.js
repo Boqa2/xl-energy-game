@@ -65,10 +65,9 @@ let timers = time;
 
 function StartGame() {
   startGame.classList.add("hidden");
-  beforStartImage.src = "assets/Image (1).png";
   hits.classList.remove("opacite-0");
   if (window.innerHeight <= 400) {
-    beforStartImage.style.height = "113%";
+    beforStartImage.style.height = "110%";
   } else {
     beforStartImage.style.height = "102.5%";
   }
@@ -98,25 +97,33 @@ hit_cols.textContent = hits_length;
 let correctS = null;
 function TextHide() {
   if (hits_length <= 0) return;
+
   drop.forEach((el, i) => {
     const correctAttr = el.getAttribute("correct");
+    const droppedItem = el.querySelector("[data-drag]");
 
+    // Если correct=false или не задан
     if (correctAttr === "false" || !correctAttr) {
       el.textContent = shuffledArray[i];
       el.classList.add("text-opacity");
       el.style.color = "rgba(0, 0, 0, 0.41)";
+
       setTimeout(() => {
         el.classList.remove("text-opacity");
-
         el.textContent = "";
-        console.log("Timout");
 
-        const droppedItem = el.querySelector("[data-drag]");
+        // Если в drop что-то есть, и это неправильное — возвращаем
         if (droppedItem) {
           const cardContainers = document.querySelectorAll(".card");
-          console.log("droppedItem");
+          const originIndex = droppedItem.getAttribute("data-origin");
+          const originContainer = cardContainers[originIndex];
 
-          cardContainers[i].appendChild(droppedItem);
+          if (originContainer) {
+            originContainer.appendChild(droppedItem);
+            droppedItem.style.background = "#fff";
+            droppedItem.classList.remove("for-small");
+          }
+          // Сбросим стили
           Object.assign(droppedItem.style, {
             position: "",
             left: "",
@@ -124,11 +131,7 @@ function TextHide() {
             zIndex: "",
             pointerEvents: "",
           });
-          dragged.style.position = "";
-          dragged.style.left = "";
-          dragged.style.top = "";
-          dragged.style.zIndex = "";
-          dragged.style.pointerEvents = "";
+
           droppedItem.removeAttribute("dragged");
         }
       }, 2000);
@@ -142,6 +145,7 @@ function TextHide() {
 drag.forEach((el, index) => {
   el.textContent = shuffledArray[index];
   el.setAttribute("data-drag", shuffledArray[index]);
+  el.setAttribute("data-origin", index);
 });
 
 drop.forEach((el, i) => {
@@ -217,23 +221,34 @@ function attachTouchEvents(elm) {
     originalParent = null;
   });
 }
-
-drag.forEach((elm) => {
+function attachMouseEvents(elm) {
   elm.addEventListener("dragstart", () => {
     dragged = elm;
     elm.classList.add("hold");
     setTimeout(() => elm.classList.add("invisible"), 0);
     elm.setAttribute("dragged", "drag");
+    elm.wasDropped = false;
   });
 
   elm.addEventListener("dragend", () => {
     elm.classList.remove("hold", "invisible");
     elm.classList.add("for-small");
+    if (!elm.wasDropped) {
+      elm.classList.remove("for-small");
+      Object.assign(elm.style, {
+        background: "#fff",
+        position: "",
+        left: "",
+        top: "",
+        zIndex: "",
+        pointerEvents: "",
+      });
+    } else {
+      elm.classList.add("for-small");
+    }
   });
-  attachTouchEvents(elm);
-});
-
-drop.forEach((drp) => {
+}
+function attachMouseEventsDrop(drp) {
   drp.addEventListener("dragenter", (e) => {
     e.preventDefault();
     drp.classList.add("hovered");
@@ -248,11 +263,16 @@ drop.forEach((drp) => {
   });
 
   drp.addEventListener("drop", () => {
+    drp.classList.remove("hovered");
+
+    if (!dragged) return;
+
     const expectedValue = drp.getAttribute("data-drop");
     const actualValue = dragged.getAttribute("data-drag");
     drp.classList.remove("hovered");
     if (dragged) {
       drp.appendChild(dragged);
+      dragged.style.background = "transparent";
     }
     if (expectedValue === actualValue) {
       drp.setAttribute("correct", true);
@@ -260,6 +280,15 @@ drop.forEach((drp) => {
       drp.setAttribute("correct", false);
     }
   });
+}
+
+drag.forEach((elm) => {
+  attachMouseEvents(elm);
+  attachTouchEvents(elm);
+});
+
+drop.forEach((drp) => {
+  attachMouseEventsDrop(drp);
 });
 
 submit.addEventListener("click", () => {
@@ -305,14 +334,23 @@ submit.addEventListener("click", () => {
     if (allCorrect) {
       text.textContent = "WELL DONE!";
       submit.classList.add("green");
+      setTimeout(() => {
+        endCard.classList.remove("hidden");
+        game.classList.add("hidden");
+      }, 1000);
     } else {
       text.textContent = "OOPS... TRY AGAIN!";
       submit.classList.add("red");
+      drop.forEach((el) => {
+        const correctAttr = el.getAttribute("correct");
+        console.log(correctAttr);
+      });
     }
   });
 });
 
 function PlayAgain() {
+  StartGame();
   const newShuffled = shuffleArray(array);
 
   game.classList.remove("hidden");
@@ -334,7 +372,7 @@ function PlayAgain() {
 
     newDrag.id = "drag";
     newDrag.className = "item";
-    newDrag.setAttribute('draggable', true)
+    newDrag.setAttribute("draggable", true);
     newDrag.setAttribute("data-drag", newShuffled[index]);
     newDrag.textContent = newShuffled[index];
     newDrag.style.background = "#fff";
@@ -345,6 +383,7 @@ function PlayAgain() {
       container.appendChild(newDrag);
     }
 
+    attachMouseEvents(newDrag);
     attachTouchEvents(newDrag);
   });
 
@@ -356,8 +395,6 @@ function PlayAgain() {
   for (let i = 0; i < shuffledArray.length; i++) {
     shuffledArray[i] = newShuffled[i];
   }
-
-  StartGame();
 }
 
 volume.addEventListener("click", volumeUp);
