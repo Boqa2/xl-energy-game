@@ -18,7 +18,7 @@ const hits = document.querySelector(".hints");
 const hit_cols = document.querySelector("#hit");
 const correct = document.querySelectorAll("[correct]");
 
-let time = 30;
+let time = 31;
 
 let dragged = null;
 let currentTouch = null;
@@ -121,7 +121,7 @@ function TextHide() {
           if (originContainer) {
             originContainer.appendChild(droppedItem);
             droppedItem.style.background = "#fff";
-            droppedItem.classList.remove("for-small");
+            droppedItem.classList.remove("for-small", "for-notTouch");
           }
           // Сбросим стили
           Object.assign(droppedItem.style, {
@@ -232,7 +232,6 @@ function attachMouseEvents(elm) {
 
   elm.addEventListener("dragend", () => {
     elm.classList.remove("hold", "invisible");
-    elm.classList.add("for-small");
     if (!elm.wasDropped) {
       elm.classList.remove("for-small");
       Object.assign(elm.style, {
@@ -269,11 +268,12 @@ function attachMouseEventsDrop(drp) {
 
     const expectedValue = drp.getAttribute("data-drop");
     const actualValue = dragged.getAttribute("data-drag");
-    drp.classList.remove("hovered");
-    if (dragged) {
-      drp.appendChild(dragged);
-      dragged.style.background = "transparent";
-    }
+
+    dragged.wasDropped = true;
+
+    drp.appendChild(dragged);
+    dragged.style.background = "transparent";
+
     if (expectedValue === actualValue) {
       drp.setAttribute("correct", true);
     } else {
@@ -292,16 +292,18 @@ drop.forEach((drp) => {
 });
 
 submit.addEventListener("click", () => {
+  const unusedDrags = document.querySelectorAll("#drag:not([dragged])");
+  if (unusedDrags.length > 0) {
+    console.log("Не все элементы размещены!");
+    text.textContent = "РАЗМЕСТИ ВСЕ ЭЛЕМЕНТЫ!";
+    submit.classList.add("red");
+    return;
+  }
+
   let allCorrect = true;
   let scores = 0;
 
   drop.forEach((dropzone) => {
-    const unusedDrags = document.querySelectorAll("#drag:not([dragged])");
-    if (unusedDrags.length > 0) {
-      console.log("Не все элементы размещены!");
-      return;
-    }
-
     const expectedValue = dropzone.getAttribute("data-drop");
     const droppedItem = dropzone.querySelector("[data-drag]");
 
@@ -318,35 +320,62 @@ submit.addEventListener("click", () => {
     if (expectedValue === actualValue) {
       droppedItem.classList.add("green-text");
       dropzone.innerHTML += `<span class="check"><img src="assets/T.png" alt="correct" /></span>`;
-      scores++;
-      score.forEach((el) => {
-        el.textContent = scores;
-      });
-      console.log(dropzone);
       dropzone.setAttribute("correct", true);
+      scores++;
     } else {
       droppedItem.classList.add("red-text");
       dropzone.innerHTML += `<span class="check"><img src="assets/X.png" alt="wrong" /></span>`;
-      allCorrect = false;
       dropzone.setAttribute("correct", false);
-    }
+      allCorrect = false;
 
-    if (allCorrect) {
-      text.textContent = "WELL DONE!";
-      submit.classList.add("green");
+      const cardContainers = document.querySelectorAll(".card");
+      const originIndex = droppedItem.getAttribute("data-origin");
+      const originContainer = cardContainers[originIndex];
+
       setTimeout(() => {
-        endCard.classList.remove("hidden");
-        game.classList.add("hidden");
-      }, 1000);
-    } else {
-      text.textContent = "OOPS... TRY AGAIN!";
-      submit.classList.add("red");
-      drop.forEach((el) => {
-        const correctAttr = el.getAttribute("correct");
-        console.log(correctAttr);
+        if (originContainer) {
+          dropzone.innerHTML = "";
+          originContainer.appendChild(droppedItem);
+          droppedItem.style.background = "#fff";
+          droppedItem.classList.remove("for-small", "red-text", "for-notTouch");
+          droppedItem.classList.remove("red-text");
+
+          droppedItem.removeAttribute("dragged");
+        }
+      }, 3000);
+
+      Object.assign(droppedItem.style, {
+        position: "",
+        left: "",
+        top: "",
+        zIndex: "",
+        pointerEvents: "",
       });
+
+      droppedItem.removeAttribute("dragged");
     }
+    drag.forEach((el) => {
+      attachTouchEvents(el);
+    });
   });
+
+  score.forEach((el) => {
+    el.textContent = scores;
+  });
+
+  if (allCorrect) {
+    text.textContent = "WELL DONE!";
+    submit.classList.remove("red");
+    submit.classList.add("green");
+    setTimeout(() => {
+      endCard.classList.remove("hidden");
+      game.classList.add("hidden");
+    }, 3000);
+  } else {
+    text.textContent = "OOPS... TRY AGAIN!";
+    submit.classList.remove("green");
+    submit.classList.add("red");
+  }
 });
 
 function PlayAgain() {
