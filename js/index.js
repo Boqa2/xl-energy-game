@@ -18,7 +18,7 @@ const hits = document.querySelector(".hints");
 const hit_cols = document.querySelector("#hit");
 const correct = document.querySelectorAll("[correct]");
 
-let time = 20;
+let time = 30;
 
 let dragged = null;
 let currentTouch = null;
@@ -151,19 +151,7 @@ drop.forEach((el, i) => {
 let offsetX = 0;
 let offsetY = 0;
 
-drag.forEach((elm) => {
-  elm.addEventListener("dragstart", () => {
-    dragged = elm;
-    elm.classList.add("hold");
-    setTimeout(() => elm.classList.add("invisible"), 0);
-    elm.setAttribute("dragged", "drag");
-  });
-
-  elm.addEventListener("dragend", () => {
-    elm.classList.remove("hold", "invisible");
-    elm.classList.add("for-small");
-  });
-
+function attachTouchEvents(elm) {
   elm.addEventListener("touchstart", (e) => {
     dragged = elm;
     currentTouch = e.touches[0];
@@ -210,6 +198,7 @@ drag.forEach((elm) => {
         originalParent.appendChild(dragged);
       }
     }
+
     dragged.style.position = "";
     dragged.style.left = "";
     dragged.style.top = "";
@@ -217,18 +206,31 @@ drag.forEach((elm) => {
     dragged.classList.remove("for-elm");
     dragged.classList.remove("for-touch");
 
-    console.log(expectedValue);
-    console.log(actualValue);
-
     if (expectedValue === actualValue) {
       dropTarget?.setAttribute("correct", true);
     } else {
       dropTarget?.setAttribute("correct", false);
     }
+
     dragged = null;
     currentTouch = null;
     originalParent = null;
   });
+}
+
+drag.forEach((elm) => {
+  elm.addEventListener("dragstart", () => {
+    dragged = elm;
+    elm.classList.add("hold");
+    setTimeout(() => elm.classList.add("invisible"), 0);
+    elm.setAttribute("dragged", "drag");
+  });
+
+  elm.addEventListener("dragend", () => {
+    elm.classList.remove("hold", "invisible");
+    elm.classList.add("for-small");
+  });
+  attachTouchEvents(elm);
 });
 
 drop.forEach((drp) => {
@@ -311,7 +313,8 @@ submit.addEventListener("click", () => {
 });
 
 function PlayAgain() {
-  StartGame();
+  const newShuffled = shuffleArray(array);
+
   game.classList.remove("hidden");
   endCard.classList.add("hidden");
 
@@ -324,19 +327,37 @@ function PlayAgain() {
   hits_length = 5;
   hit_cols.textContent = hits_length;
   const dragCont = document.querySelectorAll(".card");
-  drag.forEach((el, index) => {
-    el.innerHTML = "";
-    el.setAttribute("data-drag", shuffledArray[index]);
-    el.classList.remove("green-text", "red-text", "invisible", "for-small");
-    dragCont[index].appendChild(el);
-    el.textContent = shuffledArray[index];
-    el.style.background = "#fff";
+
+  dragCont.forEach((container, index) => {
+    const oldDrag = container.querySelector("#drag");
+    const newDrag = document.createElement("div");
+
+    newDrag.id = "drag";
+    newDrag.className = "item";
+    newDrag.setAttribute('draggable', true)
+    newDrag.setAttribute("data-drag", newShuffled[index]);
+    newDrag.textContent = newShuffled[index];
+    newDrag.style.background = "#fff";
+
+    if (oldDrag) {
+      container.replaceChild(newDrag, oldDrag);
+    } else {
+      container.appendChild(newDrag);
+    }
+
+    attachTouchEvents(newDrag);
   });
 
   drop.forEach((el, i) => {
     el.innerHTML = "";
-    el.setAttribute("data-drop", shuffledArray[i]);
+    el.setAttribute("data-drop", newShuffled[i]);
+    el.removeAttribute("correct");
   });
+  for (let i = 0; i < shuffledArray.length; i++) {
+    shuffledArray[i] = newShuffled[i];
+  }
+
+  StartGame();
 }
 
 volume.addEventListener("click", volumeUp);
