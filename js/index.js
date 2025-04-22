@@ -18,7 +18,7 @@ const hits = document.querySelector(".hints");
 const hit_cols = document.querySelector("#hit");
 const correct = document.querySelectorAll("[correct]");
 
-let time = 30;
+let time = 20;
 
 let dragged = null;
 let currentTouch = null;
@@ -102,7 +102,6 @@ function TextHide() {
     const correctAttr = el.getAttribute("correct");
     const droppedItem = el.querySelector("[data-drag]");
 
-    // Если correct=false или не задан
     if (correctAttr === "false" || !correctAttr) {
       el.textContent = shuffledArray[i];
       el.classList.add("text-opacity");
@@ -112,7 +111,6 @@ function TextHide() {
         el.classList.remove("text-opacity");
         el.textContent = "";
 
-        // Если в drop что-то есть, и это неправильное — возвращаем
         if (droppedItem) {
           const cardContainers = document.querySelectorAll(".card");
           const originIndex = droppedItem.getAttribute("data-origin");
@@ -123,7 +121,6 @@ function TextHide() {
             droppedItem.style.background = "#fff";
             droppedItem.classList.remove("for-small", "for-notTouch");
           }
-          // Сбросим стили
           Object.assign(droppedItem.style, {
             position: "",
             left: "",
@@ -134,7 +131,7 @@ function TextHide() {
 
           droppedItem.removeAttribute("dragged");
         }
-      }, 2000);
+      }, 1400);
     }
   });
 
@@ -299,7 +296,7 @@ let allCorrect = true;
 let scores = 0;
 
 function Submit() {
-  allCorrect = true; // сброс перед началом
+  allCorrect = true;
   const unusedDrags = document.querySelectorAll("#drag:not([dragged])");
   if (unusedDrags.length > 0) {
     console.log("Не все элементы размещены!");
@@ -346,7 +343,7 @@ function Submit() {
           droppedItem.classList.remove("red-text");
           droppedItem.removeAttribute("dragged");
         }
-      }, 2000);
+      }, 1900);
 
       Object.assign(droppedItem.style, {
         position: "",
@@ -394,31 +391,46 @@ function Submit() {
 
 function PlayAgain() {
   StartGame();
+
   const newShuffled = shuffleArray(array);
 
   game.classList.remove("hidden");
+
   endCard.classList.add("hidden");
 
   text.textContent = "";
+
   submit.classList.remove("green", "red");
+
   score.forEach((el) => (el.textContent = 0));
 
   timers = time;
+
   timer.textContent = timers;
+
   hits_length = 5;
+
   hit_cols.textContent = hits_length;
+
   const dragCont = document.querySelectorAll(".card");
 
   dragCont.forEach((container, index) => {
     const oldDrag = container.querySelector("#drag");
+
     const newDrag = document.createElement("div");
 
     newDrag.id = "drag";
+
     newDrag.className = "item";
+
     newDrag.setAttribute("draggable", true);
+
     newDrag.setAttribute("data-drag", newShuffled[index]);
+
     newDrag.textContent = newShuffled[index];
+
     newDrag.style.background = "#fff";
+    newDrag.setAttribute("data-origin", index);
 
     if (oldDrag) {
       container.replaceChild(newDrag, oldDrag);
@@ -427,35 +439,51 @@ function PlayAgain() {
     }
 
     attachMouseEvents(newDrag);
+
     attachTouchEvents(newDrag);
   });
 
   drop.forEach((el, i) => {
     el.innerHTML = "";
+
     el.setAttribute("data-drop", newShuffled[i]);
+
     el.removeAttribute("correct");
+
     el.classList.remove("correct", "wrong");
   });
+
   for (let i = 0; i < shuffledArray.length; i++) {
     shuffledArray[i] = newShuffled[i];
   }
+
   dragged = null;
+
   currentTouch = null;
+
   originalParent = null;
+
   allCorrect = true;
+
   scores = 0;
+
   score.forEach((el) => {
     el.textContent = scores;
   });
+
   document.querySelectorAll("#drag").forEach((el) => {
     attachTouchEvents(el);
+
     attachMouseEvents(el);
   });
+
   offsetX = 0;
+
   offsetY = 0;
 }
-submit.addEventListener("click", Submit);
+
 volume.addEventListener("click", volumeUp);
 playAgain.addEventListener("click", PlayAgain);
 hits.addEventListener("click", TextHide);
 playNow.addEventListener("click", StartGame);
+submit.addEventListener("click", Submit);
